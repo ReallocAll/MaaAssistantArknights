@@ -386,6 +386,12 @@ public static class ResourceUpdater
                 return CheckUpdateRetT.OnlyGameResourceUpdated;
             }
 
+            if (SettingsViewModel.VersionUpdateSettings.UpdateSource == "Github" &&
+                await UpdateFromGithubAsync())
+            {
+                return CheckUpdateRetT.OnlyGameResourceUpdated;
+            }
+
             return ret;
         }
         finally

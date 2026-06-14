@@ -66,7 +66,7 @@ public class RootViewModel : Conductor<Screen>.Collection.OneActive
                 return;
             }
 
-            if (Instances.AnnouncementDialogViewModel.AnnouncementInfo != string.Empty)
+            if (false && Instances.AnnouncementDialogViewModel.AnnouncementInfo != string.Empty)
             {
                 _ = Execute.OnUIThreadAsync(() => Instances.WindowManager.ShowWindow(Instances.AnnouncementDialogViewModel));
             }
