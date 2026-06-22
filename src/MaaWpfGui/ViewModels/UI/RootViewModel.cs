@@ -64,6 +64,8 @@ public class RootViewModel : Conductor<Screen>.Collection.OneActive
             MessageBoxHelper.Show(LocalizationHelper.GetString("NightlyWarning"));
         }
 
+        // ReallocAll: 永远不弹出公告窗口
+        /*
         Task.Run(async () => {
             await Instances.AnnouncementDialogViewModel.CheckAndDownloadAnnouncement();
             if (Instances.AnnouncementDialogViewModel.DoNotRemindThisAnnouncementAgain)
@@ -81,8 +83,18 @@ public class RootViewModel : Conductor<Screen>.Collection.OneActive
                 _ = Execute.OnUIThreadAsync(() => Instances.WindowManager.ShowWindow(Instances.AnnouncementDialogViewModel));
             }
         });
+        */
 
         _ = StartupIntegrityCheckAndUpdateAsync();
+
+        // ReallocAll: 启动时自动从 GitHub 源更新资源
+        _ = Task.Run(async () =>
+        {
+            if (await MaaWpfGui.Models.ResourceUpdater.UpdateFromGithubAsync())
+            {
+                await MaaWpfGui.Models.ResourceUpdater.ResourceReloadWhenIdleAsync();
+            }
+        });
 
         // 主窗口已显示，此时弹窗不会导致 WPF 因无窗口而退出
         Task.Run(ConfigBrokenCheck);
